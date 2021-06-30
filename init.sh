@@ -21,9 +21,9 @@ read luks1
 echo -n "Enter swap in MiB [ENTER]: "
 read swp
 # Fill with random data
-# dd if=/dev/urandom of="$disk" bs=4k status=progress
+#dd if=/dev/urandom of="$disk" bs=4k status=progress
 # Wipe the drive
-# wipe /dev/sda status=progress
+#wipe /dev/sda status=progress
 # Partition the drives
 sfdisk --quiet --force -- "$disk" <<-'EOF'
     label:gpt
@@ -62,7 +62,7 @@ echo "************************Formatting and Mounting Complete******************
 # Pacstrap all packages
 pacstrap "$mnt" --quiet --noprogressbar --noconfirm base linux-lts efibootmgr firefox ufw base-devel \
 plasma kde-applications efitools linux-lts-headers go linux-firmware mkinitcpio \
-lvm2 htop wget nano torbrowser-launcher e2fsprogs tor nyx vi git xf86-video-vesa gdm \
+lvm2 htop wget nano torbrowser-launcher e2fsprogs tor nyx vi git xf86-video-vesa sddm \
 dhcpcd wpa_supplicant grub sudo fwbuilder intel-ucode virtualbox \
 virtualbox-host-dkms keepass xf86-video-ati xf86-video-intel xf86-video-amdgpu \
 xf86-video-nouveau rkhunter xf86-video-fbdev > /dev/nul
