@@ -1,3 +1,5 @@
+The Manual Stage......
+
 =============Rough notes=============
 
 >Appearance
@@ -19,17 +21,19 @@ Splash Screen = non
 
 3. Application style to Oxygen and Plasma style && colours to PlasmaXDark.
 
-4. Window Decorationsto PlasmaXDark, icons to Newinx/win10 or PlasmaXDark and edit titlebar.
+4. Window Decorationsto PlasmaXDark, icons to Newinx/win10 and edit titlebar.
 
 5. Install cursors 'Windows 10 KDE' and set to win 10.
 
 6. Set Splash screen to off and install Plasma X login for login screen, change and sync.
 
-7. run ova, delete ova.
+7. run ova, delete ova, set up vms.
 
 8. Run archdi for changes.
 
-9. Menu config =
+9. history -c && sudo pacman -Scc
+
+10. Menu config =
 {
   "fullscreenDefault": false,
   "fullscreen": false,
