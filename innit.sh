@@ -37,7 +37,7 @@ EOF
 # Edit Mkinitcpio Hooks
 sed -i 's/HOOKS=(base udev autodetect modconf block filesystems keyboard fsck)/HOOKS=(base udev autodetect keyboard modconf block encrypt lvm2 filesystems fsck)/' /etc/mkinitcpio.conf
 # Run Mkinitcpio
-mkinitcpio -p linux-lts
+mkinitcpio -p linux-hardened > /dev/nul
 # Uncomment Wheel in sudoers
 sed --in-place 's/^#\s*\(%wheel\s\+ALL=(ALL)\s\+NOPASSWD:\s\+ALL\)/\1/' /etc/sudoers
 # Add user to sudoers etc
@@ -61,6 +61,7 @@ rm -R /home/user/yay
 sudo -u user yay --noprogressbar --noconfirm -Syyu
 sudo -u user yay --noprogressbar --noconfirm -S octopi
 sudo -u user yay --noprogressbar --noconfirm -S sublime-text-3
+sudo -u user yay --noprogressbar --noconfirm -S vmware-workstation
 # Rewrite Grub
 rm /etc/default/grub
 cat > /etc/default/grub <<EOF
@@ -121,7 +122,7 @@ echo "$luks1" | cryptsetup -v luksAddKey -i 1 "$dev" /root/secrets/crypto_keyfil
 # Edit Mkinitcpio Files
 sed -i 's/FILES=()/FILES=(\/root\/secrets\/crypto_keyfile.bin)/' /etc/mkinitcpio.conf
 # Run Mkinitcpio again
-mkinitcpio -p linux-lts > /dev/nul
+mkinitcpio -p linux-hardened 
 echo echo "************************Mkinitcpio Complete************************"
 # Run grub config again
 grub-mkconfig -o "$grubcfg"
@@ -133,12 +134,16 @@ pacman --noconfirm -Scc
 #pacman -S open-vm-tools xf86-video-vmware
 #systemctl enable vmtoolsd
 #systemctl vmware-vmblock-fuse
-# Enable Systemd
+# Enable services
 systemctl enable NetworkManager
 systemctl enable dhcpcd
 systemctl enable tor
 systemctl enable sddm
 systemctl enable ufw
+systemctl enable vmware-usbarbitrator
+systemctl enable vmware
+systemctl enable vmware-networks-server
+modprobe -a vmw_vmci vmmon
 # Remove innit
 rm /innit.sh
 # Clear Bash History
