@@ -1,0 +1,29 @@
+Full Documentation 
+
+sfdisk = http://www.tin.org/bin/man.cgi?section=8&topic=sfdisk
+pacman = https://man.archlinux.org/man/pacman.8
+grub = https://www.gnu.org/software/grub/manual/grub/grub.html
+cat = https://linuxize.com/post/linux-cat-command/
+>> = https://linuxize.com/post/bash-write-to-file/
+sed = https://linuxhint.com/replace_string_in_file_bash/
+makepkg = https://archlinux.org/pacman/makepkg.8.html
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
