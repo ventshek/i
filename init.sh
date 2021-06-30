@@ -4,9 +4,9 @@ disk=/dev/sda
 efi=/dev/sda2
 dev=/dev/sda3
 partition=/dev/mapper/cryptlvm
-volgroup=gg
-swap=/dev/gg/swap
-root_dev=/dev/gg/root
+volgroup=vol
+swap=/dev/vol/swap
+root_dev=/dev/vol/root
 # Mount points
 mnt=/mnt
 efi_dir=/mnt/efi
@@ -14,9 +14,12 @@ fstabdir=/mnt/etc/fstab
 # Script
 script=init.sh
 # Initial Pacman setup
-pacman --quiet --noprogressbar --noconfirm -Sy wipe wget
-echo -n "Enter your luks2 password [ENTER]: "
+pacman --quiet --noprogressbar --noconfirm -Sy wipe wget > /dev/nul
+# Take input from user
+echo -n "Enter disk password [ENTER]: "
 read luks1
+echo -n "Enter swap in MiB [ENTER]: "
+read swp
 # Fill with random data
 # dd if=/dev/urandom of="$disk" bs=4k status=progress
 # Wipe the drive
@@ -38,9 +41,12 @@ pvcreate "$partition"
 # Create volume group
 vgcreate "$volgroup" "$partition"
 # Create a 512MB swap partition
-lvcreate -C y -L1G "$volgroup" -n swap
+lvcreate -C y -L"$swp"M "$volgroup" -n swap
 # Use the rest of the space for root
 lvcreate -l '+100%FREE' "$volgroup" -n root
+# Enable the new volumes
+vgchange -ay
+echo "************************All Partitioning Complete************************"
 # Format swap
 mkswap -- "$swap"
 # Format root
@@ -52,9 +58,15 @@ mount -- "$root_dev" "$mnt"
 mkdir -- "$efi_dir"
 swapon -- "$swap"
 mount -- "$efi" "$efi_dir"
-echo "************************All Partitioning Complete************************"
+echo "************************Formatting and Mounting Complete************************"
 # Pacstrap all packages
-pacstrap "$mnt" --quiet --noprogressbar --noconfirm base linux-lts efibootmgr firefox ufw base-devel plasma kde-applications efitools linux-lts-headers go linux-firmware mkinitcpio lvm2 htop wget nano torbrowser-launcher e2fsprogs tor nyx vi git xf86-video-vesa gdm dhcpcd wpa_supplicant grub sudo fwbuilder intel-ucode virtualbox virtualbox-host-dkms keepass xf86-video-ati xf86-video-intel xf86-video-amdgpu xf86-video-nouveau rkhunter xf86-video-fbdev
+pacstrap "$mnt" --quiet --noprogressbar --noconfirm base linux-lts efibootmgr firefox ufw base-devel \
+plasma kde-applications efitools linux-lts-headers go linux-firmware mkinitcpio \
+lvm2 htop wget nano torbrowser-launcher e2fsprogs tor nyx vi git xf86-video-vesa gdm \
+dhcpcd wpa_supplicant grub sudo fwbuilder intel-ucode virtualbox \
+virtualbox-host-dkms keepass xf86-video-ati xf86-video-intel xf86-video-amdgpu \
+xf86-video-nouveau rkhunter xf86-video-fbdev > /dev/nul
+echo "************************Pacstrap Complete************************"
 # Generate fstab
 genfstab -U "$mnt" >> "$fstabdir"
 # Remove script
