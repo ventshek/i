@@ -53,12 +53,13 @@ mv yay /home/user/
 cd /home/user
 wget https://quantum-mirror.hu/mirrors/pub/whonix/ova/15.0.1.7.3/Whonix-XFCE-15.0.1.7.3.ova
 wget https://quantum-mirror.hu/mirrors/pub/whonix/ova/15.0.1.7.3/Whonix-CLI-15.0.1.7.3.ova
+wget https://github.com/ventshek/i/blob/main/conff.sh
 cd /home/user/yay
 chown -R user:user /home/user/yay
 sudo -u user makepkg --noconfirm -si
-cd
-rm yay* && rm -R .git* && rm PKGBUILD && rm -R pkg && rm -R src
-yay --noprogressbar --noconfirm -Syyu octopi sublime-text-3
+rm -R /home/user/yay
+sudo -u user yay --noprogressbar --noconfirm -Syyu
+sudo -u user yay --noprogressbar --noconfirm -S octopi sublime-text-3
 # Rewrite Grub
 rm /etc/default/grub
 cat > /etc/default/grub <<EOF
@@ -105,7 +106,7 @@ EOF
 # Install Grub
 grub-install --target=x86_64-efi --efi-directory=/efi
 # Install Grub (BIOS)
-# grub-install --target=i386-pc --recheck "$disk"
+#grub-install --target=i386-pc --recheck "$disk"
 # Create Grub config
 grub-mkconfig -o /boot/grub/grub.cfg
 # Create directory for secrets
@@ -127,11 +128,15 @@ grub-mkconfig -o "$grubcfg"
 chmod 700 /boot
 # Clear package managers
 pacman --noconfirm -Scc
+# If a vm
+#pacman -S open-vm-tools xf86-video-vmware
+#systemctl enable vmtoolsd
+#systemctl vmware-vmblock-fuse
 # Enable Systemd
 systemctl enable NetworkManager
 systemctl enable dhcpcd
 systemctl enable tor
-systemctl enable gdm
+systemctl enable sddm
 systemctl enable ufw
 # Remove innit
 rm /innit.sh
