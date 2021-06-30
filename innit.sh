@@ -68,7 +68,7 @@ cat > /etc/default/grub <<EOF
 		GRUB_TIMEOUT=5
 		GRUB_DISTRIBUTOR="Arch"
 		GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"
-		GRUB_CMDLINE_LINUX="... cryptdevice=UUID=$uuid:cryptlvm root=/dev/gg/root cryptkey=rootfs:/root/secrets/crypto_keyfile.bin"
+		GRUB_CMDLINE_LINUX="... cryptdevice=UUID=$uuid:cryptlvm root=/dev/vol/root cryptkey=rootfs:/root/secrets/crypto_keyfile.bin"
 
 		# Preload both GPT and MBR modules so that they are not missed
 		GRUB_PRELOAD_MODULES="part_gpt part_msdos"
