@@ -27,9 +27,9 @@ Splash Screen = non
 
 6. Set Splash screen to off and install Plasma X login for login screen, change and sync.
 
-7. run ova, delete ova, set up vms.
+7. run ova, delete ova, set up vms 'ZF3R0-FHED2-M80TY-8QYGC-NPKYF'.
 
-8. Run archdi for changes.
+8. Run archdi for changes. 'curl -LO archdi.sf.net/archdi && sh archdi'
 
 9. history -c && sudo pacman -Scc
 
