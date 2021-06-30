@@ -52,14 +52,15 @@ git clone https://aur.archlinux.org/yay.git
 mv yay /home/user/
 cd /home/user
 wget https://quantum-mirror.hu/mirrors/pub/whonix/ova/15.0.1.7.3/Whonix-XFCE-15.0.1.7.3.ova
-wget https://quantum-mirror.hu/mirrors/pub/whonix/ova/15.0.1.7.3/Whonix-CLI-15.0.1.7.3.ova
+#wget https://quantum-mirror.hu/mirrors/pub/whonix/ova/15.0.1.7.3/Whonix-CLI-15.0.1.7.3.ova
 wget https://github.com/ventshek/i/blob/main/conff.sh
 cd /home/user/yay
 chown -R user:user /home/user/yay
 sudo -u user makepkg --noconfirm -si
 rm -R /home/user/yay
 sudo -u user yay --noprogressbar --noconfirm -Syyu
-sudo -u user yay --noprogressbar --noconfirm -S octopi sublime-text-3
+sudo -u user yay --noprogressbar --noconfirm -S octopi
+sudo -u user yay --noprogressbar --noconfirm -S sublime-text-3
 # Rewrite Grub
 rm /etc/default/grub
 cat > /etc/default/grub <<EOF
