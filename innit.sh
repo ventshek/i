@@ -13,7 +13,7 @@ grubcfg=/boot/grub/grub.cfg
 disk=/dev/sda
 dev=/dev/sda3
 # Take input for passwords
-echo -n "Enter your luks2 password [ENTER]: "
+echo -n "Enter disk password [ENTER]: "
 read luks1
 echo -n "Enter your root password [ENTER]: "
 read rtpw
@@ -102,20 +102,10 @@ cat > /etc/default/grub <<EOF
 		GRUB_DISABLE_RECOVERY=true
 EOF
 # Add scripts to desktop + make exec
-cat > /home/user/Desktop/Update.sh <<EOF
-#!/bin/bash
-sudo pacman --noprogressbar --noconfirm -Syyu
-EOF
-cat > /home/user/Desktop/System.sh <<EOF
-#!/bin/bash
-htop
-EOF
-chmod u+x /home/user/Desktop/Update.sh
-chmod u+x /home/user/Desktop/System.sh
 # Install Grub
 grub-install --target=x86_64-efi --efi-directory=/efi
 # Install Grub (BIOS)
-grub-install --target=i386-pc --recheck "$disk"
+# grub-install --target=i386-pc --recheck "$disk"
 # Create Grub config
 grub-mkconfig -o /boot/grub/grub.cfg
 # Create directory for secrets
@@ -129,7 +119,8 @@ echo "$luks1" | cryptsetup -v luksAddKey -i 1 "$dev" /root/secrets/crypto_keyfil
 # Edit Mkinitcpio Files
 sed -i 's/FILES=()/FILES=(\/root\/secrets\/crypto_keyfile.bin)/' /etc/mkinitcpio.conf
 # Run Mkinitcpio again
-mkinitcpio -p linux-lts
+mkinitcpio -p linux-lts > /dev/nul
+echo echo "************************Mkinitcpio Complete************************"
 # Run grub config again
 grub-mkconfig -o "$grubcfg"
 # Change permissions for /boot
@@ -149,6 +140,7 @@ history -c
 # Completion message
 echo "******************Successfully Installed******************"
 echo "Grub Password = $luks1"
+echo "User Password = $usrpw"
 echo "User Password = $usrpw"
 # Exit
 exit
