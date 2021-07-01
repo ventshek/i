@@ -46,11 +46,10 @@ useradd -m -d /home/user -G wheel -s /bin/bash "$usr"
 echo "$rt":"$rtpw" | chpasswd
 echo "$usr":"$usrpw" | chpasswd
 # Grab stuff && install Yay
-cd /
+cd /home/user
 git clone https://aur.archlinux.org/yay.git
-mv yay /home/user/
 cd /home/user/yay
-chown -R root:root /home/user/yay
+chown -R user:user /home/user/yay
 sudo -u user makepkg --noconfirm -si
 rm -R /home/user/yay
 sudo -u user yay --noprogressbar --noconfirm -Syyu
