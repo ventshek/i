@@ -68,7 +68,7 @@ echo "Disk Password = $luks1"
 # get and place script
 wget https://github.com/ventshek/i/raw/main/it.sh
 mv it.sh /mnt
-chown -R root:root /mnt
+chown -R root:root /mnt/it.sh
 # Enter chroot and exec
 arch-chroot /mnt sh it.sh
 # Exit
