@@ -57,9 +57,9 @@ mount -- "$efi" "$efi_dir"
 echo "************************Formatting and Mounting Complete************************"
 # Pacstrap all packages
 pacstrap "$mnt" --quiet --noprogressbar --noconfirm base linux linux-firmware \
-mkinitcpio lvm2 vi dhcpcd wpa_supplicant \
+mkinitcpio lvm2 vi dhcpcd \
 dhcpcd open-vm-tools xf86-video-vmware \
-linux-headers > /dev/nul
+linux-headers grub efibootmgr efitools sudo > /dev/nul
 echo "************************Pacstrap Complete************************"
 # Generate fstab
 genfstab -U "$mnt" >> "$fstabdir"
@@ -68,7 +68,8 @@ echo "Disk Password = $luks1"
 # get and place script
 wget https://github.com/ventshek/i/raw/main/it.sh
 mv it.sh /mnt
+chown -R root:root /mnt
 # Enter chroot and exec
-arch-chroot /mnt ./it.sh
+arch-chroot /mnt sh it.sh
 # Exit
 exit
