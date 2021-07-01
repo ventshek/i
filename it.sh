@@ -50,7 +50,7 @@ cd /
 git clone https://aur.archlinux.org/yay.git
 mv yay /home/user/
 cd /home/user/yay
-chown -R user:user /home/user/yay
+chown -R root:root /home/user/yay
 sudo -u user makepkg --noconfirm -si
 rm -R /home/user/yay
 sudo -u user yay --noprogressbar --noconfirm -Syyu
