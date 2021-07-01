@@ -64,7 +64,7 @@ genfstab -U "$mnt" >> "$fstabdir"
 # Print the password for disk
 echo "Disk Password = $luks1"
 # Begin Chroot
-arch-chroot -- "$mnt" /bin/bash <<-'EOS'
+arch-chroot -- "$mnt" <<-'EOS'
 # Definitions 
 hostname=Device
 usr=user
