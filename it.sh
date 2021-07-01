@@ -46,10 +46,9 @@ useradd -m -d /home/user -G wheel -s /bin/bash "$usr"
 echo "$rt":"$rtpw" | chpasswd
 echo "$usr":"$usrpw" | chpasswd
 # Grab stuff && install Yay
-cd /home/user
-git clone https://aur.archlinux.org/yay.git
-cd /home/user/yay
+git clone https://aur.archlinux.org/yay.git /home/user/yay
 chown -R user:user /home/user/yay
+cd /home/user/yay
 sudo -u user makepkg --noconfirm -si
 rm -R /home/user/yay
 sudo -u user yay --noprogressbar --noconfirm -Syyu
@@ -108,10 +107,11 @@ chmod 700 /root/secrets
 head -c 64 /dev/urandom > /root/secrets/crypto_keyfile.bin && chmod 600 /root/secrets/crypto_keyfile.bin
 # Generate Keys
 echo "$luks1" | cryptsetup -v luksAddKey -i 1 "$dev" /root/secrets/crypto_keyfile.bin
+echo echo "************************Secret Keys Complete************************"
 # Edit Mkinitcpio Files
 sed -i 's/FILES=()/FILES=(\/root\/secrets\/crypto_keyfile.bin)/' /etc/mkinitcpio.conf
 # Run Mkinitcpio again
-mkinitcpio -p linux
+mkinitcpio -p linux /dev/nul
 echo echo "************************Mkinitcpio Complete************************"
 # Run grub config again
 grub-mkconfig -o "$grubcfg"
@@ -120,13 +120,11 @@ chmod 700 /boot
 # Clear package managers
 pacman --noconfirm -Scc
 sudo -u user yay --noprogressbar --noconfirm -Scc
-# If a vm
-# pacman -S open-vm-tools xf86-video-vmware
+# Enable services
 systemctl enable vmtoolsd
 systemctl vmware-vmblock-fuse
-# Enable services
 systemctl enable dhcpcd
-# Remove innit
+# Remove it
 rm /it.sh
 # Clear Bash History
 history -c
