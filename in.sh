@@ -57,7 +57,7 @@ mount -- "$efi" "$efi_dir"
 echo "************************Formatting and Mounting Complete************************"
 # Pacstrap all packages
 pacstrap "$mnt" --quiet --noprogressbar --noconfirm base linux linux-firmware \
-mkinitcpio lvm2 vi dhcpcd \
+mkinitcpio lvm2 vi dhcpcd nano \
 dhcpcd open-vm-tools xf86-video-vmware \
 linux-headers grub efibootmgr efitools sudo > /dev/nul
 echo "************************Pacstrap Complete************************"
