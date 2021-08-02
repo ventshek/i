@@ -1,4 +1,9 @@
 #!/bin/bash
+
+modprobe -a vboxguest
+modprobe -a vboxsf 
+modprobe -a vboxvideo
+
 # Splashpage
 options=()
 options+=("WGET" "(Alternative Script)")
@@ -16,7 +21,7 @@ elif [ "${sel}" = "Disk Utility" ]; then
 clear
 echo "Fetching files..."
 pacman --noconfirm -Sy  gdm gparted btrfs-progs-unstable cryptsetup \
-dosfstools e2fsprogs exfatprogs fatresize ntfs-3g \
+dosfstools e2fsprogs exfatprogs fatresize ntfs-3g squashfs-tools konsole \
 gtk3 > /dev/nul
 cat > /etc/gdm/custom.conf <<'EOS'
 [daemon]
@@ -48,7 +53,7 @@ fi
 # FYI
 tput setaf 2; echo "## Updating Pacman..."
 # Initial Pacman setup
-pacman --quiet --noprogressbar --noconfirm -Sy > /dev/nul
+pacman --quiet --noprogressbar --noconfirm -Sy cryptsetup > /dev/nul
 echo "..."
 echo "Complete..."
 
@@ -504,10 +509,11 @@ else
 tput setaf 2; 
 fi
 
-nano /mnt/II.sh
+#nano /mnt/II.sh
 
 # Start chroot with generated script
-arch-chroot /mnt sh II.sh && rm -rf /mnt/II.sh
+arch-chroot /mnt sh II.sh 
+#&& rm -rf /mnt/II.sh
 
 # Completion message
 tput setaf 2; echo "## Successfully Installed !!!"
@@ -517,10 +523,14 @@ echo "Disk Password = $luks1"
 echo "Username = $usr"
 echo "User Password = $usrpw"
 echo "Root password = $rtpw"
+if [[ $P == "2" || $P == "2" || $P == "2" ]]; then
 echo "SSH IP Address, probably one of these: " 
 ip -4 addr show enp2s0 | awk '{print $2}'
 ip -4 addr show eth0 | awk '{print $2}'
 ip -4 addr show wlan0 | awk '{print $2}'
+else 
+echo "..."
+fi
 echo "------------------------------------"
 
 # Ask user for reboot
