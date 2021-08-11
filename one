@@ -1,0 +1,52 @@
+#!/bin/bash
+
+limit=6000000
+
+DISPLAY=$(set | grep DISPLAY)
+uid=$(ls -lh /run/user* | awk '{print $9}')
+buss="path=/run/user/$uid/bus"
+bussing=$(echo $buss | sed 's/ //g')
+info="sudo -u user $DISPLAY DBUS_SESSION_BUS_ADDRESS=unix:$bussing"
+
+# Gives current ram in KB
+cur_ram_kb () {
+	free -l | awk 'NR==2 {print $3}'
+}
+
+# Gives %80 of maximum ram
+max_ram_kb () {
+	free -l | awk 'NR==2 {print $2}' | while read max; do echo $(( "$max" 80/100 )); done
+}
+
+# Prints current ram in GB + 'GIG in use'
+ram_gb_note () {
+	free -g | awk 'NR==2 {print $3}' | awk -F: '{print $1}' | while read gb; do echo $gb GiG in use; done
+}
+
+# Gives the full notify command for ram low
+notify_send_low () {
+	$info notify-send.sh -t 10000 "RAM LOW" "$(ram_gb_note)" --icon=/usr/share/icons/octopi.png --force-expire \
+	--default-action="sudo -u user htop" --action="Open Htop?":"sudo -u user htop"
+}
+
+# Gives notification of all is well
+notify_send_ok () {
+	$info notify-send.sh -t 10000 "At $(date) all is well" --icon=/usr/share/icons/octopi.png
+}
+
+# Prints out minuets of the hour
+date_is () {
+	date | awk '{print $4}' | awk -F: '{print $2}'
+}
+
+# Notify if the Ram is over the limit && gives message every hour
+while :; do
+	\
+if (( "$(cur_ram_kb)" >= "$(max_ram_kb)" )); then
+	notify_send_low && sleep 10
+else
+if [ 15 == "$(date_is)" ]; then
+	notify_send_ok && sleep 60 && echo "did it"
+fi
+fi
+done
